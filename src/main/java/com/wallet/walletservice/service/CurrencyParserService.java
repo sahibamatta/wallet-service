@@ -46,16 +46,9 @@ public class CurrencyParserService {
 			}
 			return currencyParseResponseDto;
 		}
-		catch(NumberFormatException nfe) {
-			System.out.println("number format exception--"+nfe);
-			new CurrencyParseResponseDto(ERROR_STATUS, ERROR_MESSAGE+" due to::"+nfe, null);
-		}
-		catch(IOException io) {
-			System.out.println("ioexception is::"+io);
-			new CurrencyParseResponseDto(ERROR_STATUS, ERROR_MESSAGE+" due to::"+io, null);
-		}
+
 		catch(Exception e) {
-			System.out.println("exception is::"+e);
+			System.out.println("parseCurrency exception is::"+e);
 			new CurrencyParseResponseDto(ERROR_STATUS, ERROR_MESSAGE+" due to::"+e, null);
 		}
 		return currencyParseResponseDto;
@@ -69,9 +62,9 @@ public class CurrencyParserService {
 			throws IOException, ParseException {
 
 		System.out.println("in getFromDifferentSources::");
-		
+
 		CurrencyParseResponseDto currencyParseResponseDto=getFromFirstSource(currencyParserRequestDto);
-		if(currencyParseResponseDto!=null)
+		if(currencyParseResponseDto!=null )
 			return currencyParseResponseDto;
 
 		currencyParseResponseDto=getFromSecondSource(currencyParserRequestDto);
@@ -89,66 +82,120 @@ public class CurrencyParserService {
 		return currencyParseResponseDto;
 	}
 
-	private CurrencyParseResponseDto getFromFirstSource(CurrencyParserRequestDto currencyParserRequestDto) throws IOException{
-		System.out.println("in getfromsource1");
-		String convertedCurrency="";
-		Document doc = Jsoup.connect(FIRST_SOURCE).get();
-		Elements currencyElements=doc.getElementsByClass("cc-result");
-		System.out.println("currencyElements is:"+currencyElements);
+	private CurrencyParseResponseDto getFromFirstSource(CurrencyParserRequestDto currencyParserRequestDto) {
 
-		if(!currencyElements.isEmpty()) {
-			for(int i=0;i<currencyElements.size();i++) {
-				if(currencyElements.get(i).text().contains(PYG_CURRENCY) && currencyElements.get(i+1).text().contains(ETH_CURRENCY)) {
-					System.out.println("pyg-eth conversion found");
-					convertedCurrency=currencyElements.get(i+1).text().replace(ETH_CURRENCY,"").trim();
-					break;
+		System.out.println("in getfromsource1");
+		try {
+			String convertedCurrency="";
+			Document doc = Jsoup.connect(FIRST_SOURCE).get();
+			Elements currencyElements=doc.getElementsByClass("cc-result");
+			System.out.println("currencyElements is:"+currencyElements);
+
+			if(!currencyElements.isEmpty()) {
+				for(int i=0;i<currencyElements.size();i++) {
+					if(currencyElements.get(i).text().contains(PYG_CURRENCY) && currencyElements.get(i+1).text().contains(ETH_CURRENCY)) {
+						System.out.println("pyg-eth conversion found");
+						convertedCurrency=currencyElements.get(i+1).text().replace(ETH_CURRENCY,"").trim();
+						break;
+					}
 				}
+				return convertedCurrency.equals("")?null:new CurrencyParseResponseDto(SUCCESS_STATUS,SUCCESS_MESSAGE,
+						new CurrencyParserResponseData(Double.parseDouble(convertedCurrency)*Double.parseDouble(currencyParserRequestDto.getCurrency1())));
 			}
-			return convertedCurrency.equals("")?null:new CurrencyParseResponseDto(SUCCESS_STATUS,SUCCESS_MESSAGE,
-					new CurrencyParserResponseData(Double.parseDouble(convertedCurrency)*Double.parseDouble(currencyParserRequestDto.getCurrency1())));
+		}
+
+		catch(NumberFormatException nfe) {
+			System.out.println("getFromFirstSource number format exception--"+nfe);
+			new CurrencyParseResponseDto(ERROR_STATUS, ERROR_MESSAGE+" due to::"+nfe, null);
+		}
+		catch(IOException io) {
+			System.out.println("getFromFirstSource ioexception is::"+io);
+			new CurrencyParseResponseDto(ERROR_STATUS, ERROR_MESSAGE+" due to::"+io, null);
+		}
+		catch(Exception e) {
+			System.out.println("getFromFirstSource exception is::"+e);
+			new CurrencyParseResponseDto(ERROR_STATUS, ERROR_MESSAGE+" due to::"+e, null);
 		}
 		return null;
 	}
 
 	private CurrencyParseResponseDto getFromSecondSource(CurrencyParserRequestDto currencyParserRequestDto) throws IOException{
 		System.out.println("in getFromSecondSource");
-		Document doc = Jsoup.connect(SECOND_SOURCE).get();
-		Element pygElement=doc.getElementById("value_from");
-		Element ethElement=doc.getElementById("value_to");
-		System.out.println("pygElement is::"+pygElement+"::ethElemnt is::"+ethElement);
+		try {
+			Document doc = Jsoup.connect(SECOND_SOURCE).get();
+			Element pygElement=doc.getElementById("value_from");
+			Element ethElement=doc.getElementById("value_to");
+			System.out.println("pygElement is::"+pygElement+"::ethElemnt is::"+ethElement);
 
-		return ((pygElement==null || ethElement==null)?null:new CurrencyParseResponseDto(SUCCESS_STATUS,SUCCESS_MESSAGE,
-				new CurrencyParserResponseData(Double.parseDouble(ethElement.val())/Double.parseDouble(pygElement.val())
-						*Double.parseDouble(currencyParserRequestDto.getCurrency1()))));
+			return ((pygElement==null || ethElement==null)?null:new CurrencyParseResponseDto(SUCCESS_STATUS,SUCCESS_MESSAGE,
+					new CurrencyParserResponseData(Double.parseDouble(ethElement.val())/Double.parseDouble(pygElement.val())
+							*Double.parseDouble(currencyParserRequestDto.getCurrency1()))));
+		}
+		catch(NumberFormatException nfe) {
+			System.out.println("getFromSecondSource number format exception--"+nfe);
+			new CurrencyParseResponseDto(ERROR_STATUS, ERROR_MESSAGE+" due to::"+nfe, null);
+		}
+		catch(IOException io) {
+			System.out.println("getFromSecondSource ioexception is::"+io);
+			new CurrencyParseResponseDto(ERROR_STATUS, ERROR_MESSAGE+" due to::"+io, null);
+		}
+		catch(Exception e) {
+			System.out.println("getFromSecondSource exception is::"+e);
+			new CurrencyParseResponseDto(ERROR_STATUS, ERROR_MESSAGE+" due to::"+e, null);
+		}
+
+		return null;
 
 	}
 
 	private CurrencyParseResponseDto getFromThirdSource(CurrencyParserRequestDto currencyParserRequestDto) throws IOException {
 		System.out.println("in getfromthirdsource");
-		Document doc = Jsoup.connect(THIRD_SOURCE).get();
-		Elements ethElements=doc.getElementsByClass("converter-title-amount");
-		System.out.println("ethElements is::"+ethElements);
-		String ethString=ethElements.get(0).text();
-		return ethString.isEmpty()?null:new CurrencyParseResponseDto(SUCCESS_STATUS,SUCCESS_MESSAGE, 
-				new CurrencyParserResponseData(Double.parseDouble(ethString)*Double.parseDouble(currencyParserRequestDto.getCurrency1())));
+		try {
+			Document doc = Jsoup.connect(THIRD_SOURCE).get();
+			Elements ethElements=doc.getElementsByClass("converter-title-amount");
+			System.out.println("ethElements is::"+ethElements);
+			String ethString=ethElements.get(0).text();
+			return ethString.isEmpty()?null:new CurrencyParseResponseDto(SUCCESS_STATUS,SUCCESS_MESSAGE, 
+					new CurrencyParserResponseData(Double.parseDouble(ethString)*Double.parseDouble(currencyParserRequestDto.getCurrency1())));
+		}
+		catch(NumberFormatException nfe) {
+			System.out.println("getFromThirdSource number format exception--"+nfe);
+			new CurrencyParseResponseDto(ERROR_STATUS, ERROR_MESSAGE+" due to::"+nfe, null);
+		}
+		catch(IOException io) {
+			System.out.println("getFromThirdSource ioexception is::"+io);
+			new CurrencyParseResponseDto(ERROR_STATUS, ERROR_MESSAGE+" due to::"+io, null);
+		}
+		catch(Exception e) {
+			System.out.println("getFromThirdSource exception is::"+e);
+			new CurrencyParseResponseDto(ERROR_STATUS, ERROR_MESSAGE+" due to::"+e, null);
+		}
+		return null;
 	}
 
 	private CurrencyParseResponseDto findInTable(CurrencyParserRequestDto currencyParserRequestDto) {
 		System.out.println("in findInTable--");
 
-		WalletCurrencyDetailsEntity walletCurrencyDetailsEntity=walletCurrencyDetailsRepository.findByDate(new Date());
-		System.out.println("walletcurrencydetailsentity is::"+walletCurrencyDetailsEntity);
+		try {
+			WalletCurrencyDetailsEntity walletCurrencyDetailsEntity=walletCurrencyDetailsRepository.findByDate(new Date());
+			System.out.println("walletcurrencydetailsentity is::"+walletCurrencyDetailsEntity);
 
-		if(walletCurrencyDetailsEntity==null) {
-			return null;
+			if(walletCurrencyDetailsEntity==null) {
+				return null;
+			}
+			else {
+				Double pyg = Double.parseDouble(currencyParserRequestDto.getCurrency1());
+				Double convertedEth=walletCurrencyDetailsEntity.getEth()*(pyg);
+				return new CurrencyParseResponseDto(SUCCESS_STATUS,SUCCESS_MESSAGE,
+						new CurrencyParserResponseData(convertedEth));
+			}
+
+
 		}
-		else {
-			Double pyg = Double.parseDouble(currencyParserRequestDto.getCurrency1());
-			Double convertedEth=walletCurrencyDetailsEntity.getEth()*(pyg);
-			return new CurrencyParseResponseDto(SUCCESS_STATUS,SUCCESS_MESSAGE,
-					new CurrencyParserResponseData(convertedEth));
-
-		}	
+		catch(Exception e) {
+			System.out.println("find in table exception");
+		}
+		return null;
 	}
 
 	private void insertIntoTable(CurrencyParserRequestDto currencyParserRequestDto,CurrencyParseResponseDto currencyParserResponseDto ) {
