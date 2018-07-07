@@ -1,7 +1,5 @@
 package com.wallet.walletservice.dto;
 
-import java.util.List;
-
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
@@ -9,9 +7,8 @@ import lombok.Setter;
 @Getter
 @Setter
 @AllArgsConstructor
-public class BlockedUsersReportDto {
-
-	private int status;
-	private String message;
-	private List<BlockedUsersData> data; 
+public class TncResponseDto {
+	
+	private String title;
+	private String body;
 }

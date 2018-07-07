@@ -7,9 +7,9 @@ import lombok.Setter;
 @Setter
 public class LoginResponseDto {
 	
-	int status;
-	String message;
-	String token;
-	String profile;
+	private int status;
+	private String message;
+	private String token;
+	private String profile;
 
 }

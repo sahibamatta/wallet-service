@@ -7,7 +7,7 @@ import lombok.Setter;
 @Setter
 public class HeaderFooterDto {
 	
-	String header;
-	String footer;
+	private String header;
+	private String footer;
 
 }

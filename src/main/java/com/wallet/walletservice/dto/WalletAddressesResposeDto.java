@@ -9,9 +9,8 @@ import lombok.Setter;
 @Getter
 @Setter
 @AllArgsConstructor
-public class BlockedUsersReportDto {
+public class WalletAddressesResposeDto {
 
-	private int status;
-	private String message;
-	private List<BlockedUsersData> data; 
+	private List<String> walletAddresses;
+
 }

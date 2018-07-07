@@ -9,8 +9,8 @@ import lombok.Setter;
 @AllArgsConstructor
 public class BlockedUsersIPDto {
 
-	int status;
-	String message;
-	String ip;
+	private int status;
+	private String message;
+	private String ip;
 
 }

@@ -11,12 +11,9 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 
 import com.wallet.configuration.LocalTimeConverter;
 
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -33,14 +30,14 @@ public class BlockedUserReportEntity implements Serializable {
 
 	@Id
 	@GeneratedValue(strategy=GenerationType.AUTO)
-	int id;
-	Date date;
+	private int id;
+	private Date date;
 	@Convert(converter = LocalTimeConverter.class)
-	LocalTime time;
+	private LocalTime time;
 	@Column(name="user_id")
-	String userId;
+	private String userId;
 	@Column(name="user_profile")
-	String userProfile;
-	String ip;
+	private String userProfile;
+	private String ip;
 
 }

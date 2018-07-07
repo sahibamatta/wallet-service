@@ -7,11 +7,7 @@ import lombok.ToString;
 @Getter
 @Setter
 @ToString
-public class BlockedUsersData {
-	
-	private String userId;
-	private String profile;
-	private String ip;
-	private String time;
-	
+public class CurrencyParserRequestDto {
+		
+	private String currency1;
 }

@@ -1,17 +1,20 @@
 package com.wallet.walletservice.dto;
 
-import java.util.List;
-
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 
 @Getter
 @Setter
 @AllArgsConstructor
-public class BlockedUsersReportDto {
+@NoArgsConstructor
+@ToString
+public class CurrencyParseResponseDto {
 
 	private int status;
 	private String message;
-	private List<BlockedUsersData> data; 
+	private CurrencyParserResponseData data;
+
 }
