@@ -96,6 +96,7 @@ public class CurrencyParserService {
 					if(currencyElements.get(i).text().contains(PYG_CURRENCY) && currencyElements.get(i+1).text().contains(ETH_CURRENCY)) {
 						System.out.println("pyg-eth conversion found");
 						convertedCurrency=currencyElements.get(i+1).text().replace(ETH_CURRENCY,"").trim();
+						System.out.println("convertedCurrency is::"+convertedCurrency);
 						break;
 					}
 				}
@@ -155,6 +156,7 @@ public class CurrencyParserService {
 			Elements ethElements=doc.getElementsByClass("converter-title-amount");
 			System.out.println("ethElements is::"+ethElements);
 			String ethString=ethElements.get(0).text();
+			System.out.println("ethString is::"+ethString+"::eth empty::"+ethString.isEmpty());
 			return ethString.isEmpty()?null:new CurrencyParseResponseDto(SUCCESS_STATUS,SUCCESS_MESSAGE, 
 					new CurrencyParserResponseData(Double.parseDouble(ethString)*Double.parseDouble(currencyParserRequestDto.getCurrency1())));
 		}
@@ -186,6 +188,7 @@ public class CurrencyParserService {
 			else {
 				Double pyg = Double.parseDouble(currencyParserRequestDto.getCurrency1());
 				Double convertedEth=walletCurrencyDetailsEntity.getEth()*(pyg);
+				System.out.println("pyg is::"+pyg+"::convertedeth is::"+convertedEth);
 				return new CurrencyParseResponseDto(SUCCESS_STATUS,SUCCESS_MESSAGE,
 						new CurrencyParserResponseData(convertedEth));
 			}

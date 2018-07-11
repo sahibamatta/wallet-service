@@ -12,6 +12,7 @@ import com.wallet.walletservice.dto.CommonResponseDto;
 import com.wallet.walletservice.dto.CurrencyParseResponseDto;
 import com.wallet.walletservice.dto.CurrencyParserRequestDto;
 import com.wallet.walletservice.dto.TncResponseDto;
+import com.wallet.walletservice.dto.TransferFromDto;
 import com.wallet.walletservice.dto.WalletAddressesResposeDto;
 import com.wallet.walletservice.dto.WalletAmountTransferReportDto;
 import com.wallet.walletservice.dto.WalletTransferAmountRequestDto;
@@ -58,6 +59,12 @@ public class WalletController {
 	public WalletAmountTransferReportDto amountTransferReport(@PathVariable("start") String start, @PathVariable("end") String end) {
 		System.out.println("in transferAmount");
 		return walletService.amountTransferReport(start, end);
+	}
+	
+	@RequestMapping(value="/transferFrom" , method=RequestMethod.GET)
+	public TransferFromDto walletTransferFromAddress() {
+		System.out.println("in walletTransferFromAddress");
+		return walletService.getTransferFromWalletAddress();
 	}
 
 }

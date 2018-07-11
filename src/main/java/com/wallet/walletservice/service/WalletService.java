@@ -10,11 +10,13 @@ import org.springframework.stereotype.Service;
 
 import com.wallet.walletservice.dto.CommonResponseDto;
 import com.wallet.walletservice.dto.TncResponseDto;
+import com.wallet.walletservice.dto.TransferFromDto;
 import com.wallet.walletservice.dto.WalletAddressesResposeDto;
 import com.wallet.walletservice.dto.WalletAmountTransferReportDto;
 import com.wallet.walletservice.dto.WalletTransferAmountRequestDto;
 import com.wallet.walletservice.entity.WalletTermsAndConditions;
 import com.wallet.walletservice.entity.WalletTransferReportEntity;
+import com.wallet.walletservice.properties.WalletProperties;
 import com.wallet.walletservice.repository.WalletProfilesRepository;
 import com.wallet.walletservice.repository.WalletTermsAndConditionsRepository;
 import com.wallet.walletservice.repository.WalletTransferReprotRepository;
@@ -38,6 +40,9 @@ public class WalletService {
 
 	@Autowired
 	private WalletTransferReprotRepository walletTransferReprotRepository;
+	
+	@Autowired
+	private WalletProperties walletProperties;
 
 	public WalletAddressesResposeDto getWalletAddresses() {
 		System.out.println("in getWalletAddreesses service");
@@ -96,5 +101,11 @@ public class WalletService {
 			System.out.println("exception in amountTransferReport::"+e);
 			return new WalletAmountTransferReportDto(ERROR_STATUS, REPORT_ERROR_MESSAGE2+e, walletTransferAmountRequestDtoList);
 		}
+	}
+	
+	public TransferFromDto getTransferFromWalletAddress() {
+		System.out.println("in getTransferFromWalletAddesss walletaddress is::"+walletProperties.getWalletAddress());
+		return new TransferFromDto(walletProperties.getWalletAddress());
+		
 	}
 }
