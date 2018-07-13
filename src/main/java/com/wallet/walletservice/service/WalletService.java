@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.wallet.walletservice.dto.CommonResponseDto;
+import com.wallet.walletservice.dto.ReasonDto;
 import com.wallet.walletservice.dto.TncResponseDto;
 import com.wallet.walletservice.dto.TransferFromDto;
 import com.wallet.walletservice.dto.WalletAddressesResposeDto;
@@ -18,6 +19,7 @@ import com.wallet.walletservice.entity.WalletTermsAndConditions;
 import com.wallet.walletservice.entity.WalletTransferReportEntity;
 import com.wallet.walletservice.properties.WalletProperties;
 import com.wallet.walletservice.repository.WalletProfilesRepository;
+import com.wallet.walletservice.repository.WalletReasonRepository;
 import com.wallet.walletservice.repository.WalletTermsAndConditionsRepository;
 import com.wallet.walletservice.repository.WalletTransferReprotRepository;
 
@@ -40,9 +42,12 @@ public class WalletService {
 
 	@Autowired
 	private WalletTransferReprotRepository walletTransferReprotRepository;
-	
+
 	@Autowired
 	private WalletProperties walletProperties;
+
+	@Autowired
+	private WalletReasonRepository walletReasonRepository;
 
 	public WalletAddressesResposeDto getWalletAddresses() {
 		System.out.println("in getWalletAddreesses service");
@@ -66,6 +71,7 @@ public class WalletService {
 			walletTransferReportEntity.setAmountPyg(Double.parseDouble(walletTransferAmountRequestDto.getAmountPyg()));
 			walletTransferReportEntity.setAmountEth(Double.parseDouble(walletTransferAmountRequestDto.getAmountEth()));
 			walletTransferReportEntity.setDate(new Date());
+			walletTransferReportEntity.setReason(walletTransferAmountRequestDto.getReason());
 			walletTransferReprotRepository.save(walletTransferReportEntity);
 			return new CommonResponseDto(SUCCESS_STATUS,SUCCESS_MESSAGE);
 		}
@@ -92,7 +98,8 @@ public class WalletService {
 				WalletTransferAmountRequestDto walletTransferAmountRequestDto = new WalletTransferAmountRequestDto
 						(walletTransferReportEntity.getTransferFromAddress(), walletTransferReportEntity.getAmountPyg().toString(), 
 								walletTransferReportEntity.getAmountEth().toString(),walletTransferReportEntity.getTransferToAddress(),
-								new SimpleDateFormat("yyyy-MM-dd").format(walletTransferReportEntity.getDate())); 
+								new SimpleDateFormat("yyyy-MM-dd").format(walletTransferReportEntity.getDate()),
+								walletTransferReportEntity.getReason()); 
 				walletTransferAmountRequestDtoList.add(walletTransferAmountRequestDto);
 			}
 			return new WalletAmountTransferReportDto(SUCCESS_STATUS, REPORT_SUCCESS_MESSAGE, walletTransferAmountRequestDtoList);
@@ -102,10 +109,15 @@ public class WalletService {
 			return new WalletAmountTransferReportDto(ERROR_STATUS, REPORT_ERROR_MESSAGE2+e, walletTransferAmountRequestDtoList);
 		}
 	}
-	
+
 	public TransferFromDto getTransferFromWalletAddress() {
 		System.out.println("in getTransferFromWalletAddesss walletaddress is::"+walletProperties.getWalletAddress());
 		return new TransferFromDto(walletProperties.getWalletAddress());
-		
+
+	}
+
+	public ReasonDto getReasonForTransfer() {
+		System.out.println("in getReasonForTransfer service");
+		return new ReasonDto(walletReasonRepository.getReasons());
 	}
 }

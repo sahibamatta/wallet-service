@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.wallet.walletservice.dto.CommonResponseDto;
 import com.wallet.walletservice.dto.CurrencyParseResponseDto;
 import com.wallet.walletservice.dto.CurrencyParserRequestDto;
+import com.wallet.walletservice.dto.ReasonDto;
 import com.wallet.walletservice.dto.TncResponseDto;
 import com.wallet.walletservice.dto.TransferFromDto;
 import com.wallet.walletservice.dto.WalletAddressesResposeDto;
@@ -65,6 +66,12 @@ public class WalletController {
 	public TransferFromDto walletTransferFromAddress() {
 		System.out.println("in walletTransferFromAddress");
 		return walletService.getTransferFromWalletAddress();
+	}
+
+	@RequestMapping(value="/reason" , method=RequestMethod.GET)
+	public ReasonDto getReasonForTransfer() {
+		System.out.println("in getReasonForTransfer");
+		return walletService.getReasonForTransfer();
 	}
 
 }

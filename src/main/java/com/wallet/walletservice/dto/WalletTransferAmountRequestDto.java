@@ -14,5 +14,6 @@ public class WalletTransferAmountRequestDto {
 	private String amountEth;
 	private String transferTo;
 	private String date;
+	private String reason;
 
 }

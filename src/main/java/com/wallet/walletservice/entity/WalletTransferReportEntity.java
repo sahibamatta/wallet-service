@@ -22,14 +22,16 @@ public class WalletTransferReportEntity implements Serializable {
 	private static final long serialVersionUID = -2885705117987069229L;
 	@Id
 	@GeneratedValue(strategy=GenerationType.AUTO)
-	int id;
+	private int id;
 	@Column(name ="transfer_from_address")
-	String transferFromAddress;
+	private String transferFromAddress;
 	@Column(name ="amount_pyg")
-	Double amountPyg;
+	private Double amountPyg;
 	@Column(name ="amount_eth")
-	Double amountEth;
+	private Double amountEth;
 	@Column(name ="transfer_to")
-	String transferToAddress;
-	Date date;
+	private String transferToAddress;
+	private Date date;
+	@Column(name ="reason")
+	private String reason;
 }
