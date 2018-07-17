@@ -32,13 +32,16 @@ public class UserService {
 	@Autowired
 	private BlockedUserReportRepository blockedUserReportRepository;
 
-	private static final String SUCCESS_MESSAGE ="User Created Successfully";
+	//private static final String SUCCESS_MESSAGE ="User Created Successfully";
+	private static final String SUCCESS_MESSAGE ="Usuario Creado Correctamente";
 	private static final String ERROR_MESSAGE = " already exists";
-	private static final String UPDATE_SUCCESS_MESSAGE ="User Updated Successfully";
+	//private static final String UPDATE_SUCCESS_MESSAGE ="User Updated Successfully";
+	private static final String UPDATE_SUCCESS_MESSAGE ="Usuario actualizado correctamente";
 	private static final String UPDATE_ERROR_MESSAGE = "Error Updating User";
 	private static final int SUCCESS_STATUS = 1;
 	private static final int ERROR_STATUS = 0;
-	private static final String DELETE_MESSAGE ="User deleted Successfully";
+	//private static final String DELETE_MESSAGE ="User deleted Successfully";
+	private static final String DELETE_MESSAGE ="Usuario suprimido correctamente";
 
 
 	public CommonResponseDto createUser(UserCreateRequestDto userCreateRequestDto) {

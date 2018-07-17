@@ -26,7 +26,8 @@ import com.wallet.walletservice.repository.WalletTransferReprotRepository;
 @Service
 public class WalletService {
 
-	private static final String SUCCESS_MESSAGE ="Amount Transferred Successfully";
+	//private static final String SUCCESS_MESSAGE ="Amount Transferred Successfully";
+	private static final String SUCCESS_MESSAGE ="Transacción realizada con éxito";
 	private static final String ERROR_MESSAGE = "Amount couldn't be transferred due to ";
 	private static final String REPORT_SUCCESS_MESSAGE ="Data fetched successfully";
 	private static final String REPORT_ERROR_MESSAGE = "No data found for the given dates";
